@@ -27,6 +27,7 @@ public class Router {
         boolean isReverse = false;
         String filePath;
         Router r;
+        neighborList = new ArrayList<>();
 
         //get input
         if(args.length < 1){

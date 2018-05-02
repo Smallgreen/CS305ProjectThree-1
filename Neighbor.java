@@ -12,4 +12,12 @@ public class Neighbor {
         this.weight = weight;
         this.r = r;
     }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getIp() {
+        return ip;
+    }
 }
