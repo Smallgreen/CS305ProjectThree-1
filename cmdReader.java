@@ -7,16 +7,14 @@ public class cmdReader implements Runnable{
 //    CHANGE <dst-ip> <dst-port> <new-weight>
 
     private Router r;
-    private Scanner sc;
 
     public cmdReader(Router r){
         this.r = r;
-        sc = new Scanner(System.in);
     }
 
     @Override
     public void run() {
-
+        Scanner sc = new Scanner(System.in);
         while(sc.hasNextLine()){
 
             String line = sc.nextLine();
@@ -25,23 +23,27 @@ public class cmdReader implements Runnable{
             if(lineSc.hasNext()){
                 String cmd = lineSc.next();
 
+
                 switch (cmd){
                     case("MSG"): {
                         String destIP = lineSc.next();
-                        int destPort = Integer.parseInt(lineSc.next());
+                        String dPort = lineSc.next();
+                        int destPort = Integer.parseInt(dPort);
                         String msg = "";
 
-                        //get msg content
-                        if(lineSc.hasNext()){
-                            msg += lineSc.next();
+                        msg += destIP;
+                        msg += " " +dPort;
 
-                            while(lineSc.hasNext()){
-                                msg += " " + lineSc.next();
-                            }
+                        msg += " " +r.getIp();
+                        msg += " " +r.getPort();
+
+                        //get msg content
+                        while(lineSc.hasNext()){
+                            msg += " " + lineSc.next();
                         }
 
                         r.sendMessage(msg, destIP, destPort);
-                        return;
+                        break;
                     }
 
                     case("PRINT"): {

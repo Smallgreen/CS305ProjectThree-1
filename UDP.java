@@ -24,7 +24,7 @@ public class UDP {
         int length;
         byte type = 0;
         byte splitter = 120;
-        String address = destIp + "-" + Integer.toString(destPort);
+        String address = " " + destIp + " - " + Integer.toString(destPort);
 
         length = 1 + msg.length() + 1 + address.length();
 
@@ -49,8 +49,8 @@ public class UDP {
 
         sendHelper(sentMsg, destIp, destPort);
 
-        System.out.println("Message from" + srcIp + ":" + srcPort + "forward to" +
-                destIp + ":" + destPort + msg);
+        System.out.println("Message from " + srcIp + " : " + srcPort + " forward to " +
+                destIp + " : " + destPort + " " + sentMsg.toString());
 
     }
 

@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.util.ArrayList;
 
 public class RouterReceiver implements Runnable{
 
@@ -22,7 +21,10 @@ public class RouterReceiver implements Runnable{
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 listeningSocket.receive(receivePacket);
                 byte[] bytes = receivePacket.getData();
-                operate(bytes);
+                String data = new String(bytes).trim();
+                //System.out.println(bytes[0]);
+                operate(data, bytes[0]);
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -31,35 +33,29 @@ public class RouterReceiver implements Runnable{
 
     }
 
-    public void operate(byte[] data){
-        byte type = data[0];
+    public void operate(String data, byte type){
+        //format: type destIp destPort srcIp srcPort msg
 
         switch(type){
-            case(0): {
-                //get content till splitter
-                ArrayList<Byte> contentlist = new ArrayList<>();
-                int index = 1;
-                while(data[index] != 120){
-                    contentlist.add(data[index]);
-                    index++;
+            case(0):
+                String[] msg = data.split(" ");
+                //if port = dest port
+                String content = "";
+                if(Integer.parseInt(msg[1]) == router.getPort()){
+                    for(int i = 4; i < msg.length; i++) {
+                        content += msg[i];
+                    }
+                    System.out.println("Message received from " + msg[2] +" : "+ Integer.parseInt(msg[3])
+                                        + " message: " + content);
                 }
-                Byte[] temp = contentlist.toArray(new Byte[contentlist.size()]);
-                byte[] content = toPrimitives(temp);
-
-                handleContent(content);
-
-                System.out.println(content.toString());
-
-            }
+                else{
+                    router.sendMessage(data, msg[0], Integer.parseInt(msg[1]));
+                }
+            return;
         }
 
     }
 
-    private void handleContent(byte[] data){
-
-        //check if it is at the dest
-
-    }
 
     private byte[] toPrimitives(Byte[] Bytes)
     {

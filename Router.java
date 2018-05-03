@@ -54,7 +54,7 @@ public class Router {
 
     }
 
-    public void fowardMessage(String msg, String destIp, int destPort){
+    public void forwardMessage(String msg, String destIp, int destPort){
 
         try {
             sender.sendMessage(msg, destIp, destPort, ip, port);
@@ -66,12 +66,12 @@ public class Router {
     public void sendMessage(String msg, String destIp, int destPort){
         Neighbor nextHop = forwardingTable.get(destPort);
 
-        if(nextHop == null){
-            return;
-        }
-
-        fowardMessage(msg, nextHop.getIp(), nextHop.getPort());
-        //fowardMessage(msg, destIp, destPort);
+//        if(nextHop == null){
+//            return;
+//        }
+//
+//        forwardMessage(msg, nextHop.getIp(), nextHop.getPort());
+        forwardMessage(msg, destIp, destPort);
     }
 
     public static void addNeighbor(Neighbor n){
