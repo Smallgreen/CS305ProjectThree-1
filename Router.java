@@ -55,6 +55,7 @@ public class Router {
     }
 
     public void fowardMessage(String msg, String destIp, int destPort){
+
         try {
             sender.sendMessage(msg, destIp, destPort, ip, port);
         } catch (IOException e) {
@@ -63,8 +64,14 @@ public class Router {
     }
 
     public void sendMessage(String msg, String destIp, int destPort){
+        Neighbor nextHop = forwardingTable.get(destPort);
 
-        fowardMessage(msg, destIp, destPort);
+        if(nextHop == null){
+            return;
+        }
+
+        fowardMessage(msg, nextHop.getIp(), nextHop.getPort());
+        //fowardMessage(msg, destIp, destPort);
     }
 
     public static void addNeighbor(Neighbor n){

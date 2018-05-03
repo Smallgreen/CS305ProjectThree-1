@@ -48,12 +48,16 @@ public class RouterReceiver implements Runnable{
 
                 handleContent(content);
 
+                System.out.println(content.toString());
+
             }
         }
 
     }
 
     private void handleContent(byte[] data){
+
+        //check if it is at the dest
 
     }
 

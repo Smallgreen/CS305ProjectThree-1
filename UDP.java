@@ -50,7 +50,7 @@ public class UDP {
         sendHelper(sentMsg, destIp, destPort);
 
         System.out.println("Message from" + srcIp + ":" + srcPort + "forward to" +
-                destIp + ":" + destPort + sentMsg.toString());
+                destIp + ":" + destPort + msg);
 
     }
 
