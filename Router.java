@@ -1,5 +1,10 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Router {
@@ -8,17 +13,81 @@ public class Router {
     private String ip;
     private int port;
 
+    private DatagramSocket socket;
+
+    private UDP sender;
+    private RouterReceiver routerRcv;
+    private cmdReader creader;
+
     //port - weight
     private static ArrayList<Neighbor> neighborList;
+    private Map<Integer, Neighbor> forwardingTable;
 
     public Router(String ip, int port, boolean isReverse){
         this.reverse = isReverse;
         this.ip = ip;
         this.port = port;
+
+        forwardingTable = new HashMap<>();
+
+        //init socket
+        try {
+            this.socket = new DatagramSocket(port);
+        } catch (SocketException e) {
+            System.out.println("failed");
+            e.printStackTrace();
+        }
+
+        sender = new UDP(socket);
+    }
+
+    public void startThreads(){
+        //start receiver
+        routerRcv = new RouterReceiver(this);
+        Thread routerRcvThread = new Thread(routerRcv);
+        routerRcvThread.start();
+
+        //start cmdReader
+        creader = new cmdReader(this);
+        Thread creaderThread = new Thread(creader);
+        creaderThread.start();
+
+    }
+
+    public void forwardMessage(String msg, String destIp, int destPort){
+
+        try {
+            sender.sendMessage(msg, destIp, destPort, ip, port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMessage(String msg, String destIp, int destPort){
+        Neighbor nextHop = forwardingTable.get(destPort);
+
+//        if(nextHop == null){
+//            return;
+//        }
+//
+//        forwardMessage(msg, nextHop.getIp(), nextHop.getPort());
+        forwardMessage(msg, destIp, destPort);
     }
 
     public static void addNeighbor(Neighbor n){
         neighborList.add(n);
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public DatagramSocket getSocket() {
+        return socket;
     }
 
     //0-reverse 1-neighbors.txt
@@ -71,6 +140,8 @@ public class Router {
 
         r = new Router(rIP, rPort, isReverse);
 
+        System.out.println(rIP +" " + rPort);
+
         //add neighbors
         for(int i = 1; i < inputs.size(); i++){
             String neighbor = inputs.get(i);
@@ -82,7 +153,10 @@ public class Router {
         Neighbor newNeighbor = new Neighbor(nIP, nPort, weight, r);
         addNeighbor(newNeighbor);
 
+
         }
+        r.startThreads();
+
 
     }
 
