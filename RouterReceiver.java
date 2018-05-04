@@ -101,11 +101,11 @@ public class RouterReceiver implements Runnable{
                 System.out.println("get"+router.getNeighbor(srcPort).getPort());
                 //if null, new neighbor
                 if(router.getNeighbor(srcPort) == null){
-                    System.out.println("here");
                     router.addNeighbor(new Neighbor(srcIp, srcPort, weight, router));
                 }
                 else{
                     if(router.updateLocalWeight(weight, srcIp, srcPort)){
+                        System.out.println("new weight to neighbor "+router.getIp()+" : "+ router.getPort() + " " + weight);
 
                         if(router.dvAlgorithm()){
                             //System.out.println("aaa");
@@ -113,7 +113,6 @@ public class RouterReceiver implements Runnable{
                         }
                     }
                 }
-                //System.out.println("new weight to neighbor "+router.getIp()+" : "+ router.getPort() + " " + );
                 break;
             }
         }

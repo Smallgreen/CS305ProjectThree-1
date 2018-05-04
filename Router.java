@@ -88,6 +88,8 @@ public class Router {
     }
 
     public synchronized boolean updateLocalWeight(int newWeight, String destIp, int destPort){
+
+        System.out.println(neighborList);
         Neighbor n = getNeighbor(destPort);
         int oldWeight = n.getWeight();
 
@@ -191,6 +193,7 @@ public class Router {
     }
 
     public Neighbor getNeighbor(int nport){
+
         for(Neighbor n : neighborList){
             if(n.getPort() == nport){
                 return n;

@@ -69,7 +69,7 @@ public class Neighbor {
     public boolean equals(Object obj) {
         if(obj instanceof Neighbor){
             Neighbor n = (Neighbor) obj;
-            return this.ip.equals(n.ip) && this.port == n.port && this.weight == n.weight;
+            return this.ip.equals(n.ip) && this.port == n.port;
         }
         return false;
     }

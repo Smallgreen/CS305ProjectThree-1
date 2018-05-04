@@ -34,7 +34,7 @@ public class DistanceVector {
         String dv = "";
 
         for(Neighbor n: dvector.keySet()){
-            dv += n.getIp() + " : " + n.getPort() + " " + n.getWeight() + "\n";
+            dv += n.getIp() + " : " + n.getPort() + " " + dvector.get(n) + "\n";
         }
 
         return dv;
@@ -43,13 +43,6 @@ public class DistanceVector {
     public void update(Neighbor n, Integer weight){
         dvector.put(n,weight);
     }
-
-//    @Override
-//    public int hashCode() {
-//        int hash = 3;
-//        hash = 47 * hash + Objects.hashCode(this.dvector);
-//        return hash;
-//    }
 
     @Override
     public boolean equals(Object obj) {

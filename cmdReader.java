@@ -63,7 +63,7 @@ public class cmdReader implements Runnable{
                         r.updateWeight(weight, destIP, destPort);
 
                         //update cur router
-                        if(r.updateLocalWeight(weight, r.getIp(), r.getPort())){
+                        if(r.updateLocalWeight(weight, destIP, destPort)){
                             if(r.dvAlgorithm()){
                                 r.autoBroadcast();
                             }
