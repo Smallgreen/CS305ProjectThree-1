@@ -56,7 +56,7 @@ public class Router {
         Thread creaderThread = new Thread(creader);
         creaderThread.start();
 
-        dvp = new DVupdater(this, 20);
+        dvp = new DVupdater(this, 10);
         Thread dvpThread = new Thread(dvp);
         dvpThread.start();
 
@@ -239,6 +239,7 @@ public class Router {
 
     public void addNeighbor(Neighbor n){
         neighborList.add(n);
+        n.startTimer();
         System.out.println("add neighbor");
         //recalculate forwarding table and run dv alg
         if(dvAlgorithm()){

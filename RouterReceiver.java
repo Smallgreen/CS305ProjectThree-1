@@ -74,7 +74,7 @@ public class RouterReceiver implements Runnable{
                     router.addNeighbor(new Neighbor(srcIp, Integer.parseInt(srcPort), Integer.MAX_VALUE, router));
                 }
 
-                //router.getNeighbor(Integer.parseInt(srcPort)).startTimer();
+                router.getNeighbor(Integer.parseInt(srcPort)).reStartTimer();
 
                 DistanceVector dv = new DistanceVector(msgDV[1], router);
                 System.out.println(dv.getDV());
