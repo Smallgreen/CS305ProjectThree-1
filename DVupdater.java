@@ -8,7 +8,7 @@ public class DVupdater implements Runnable{
     public Router router;
     public Timer timer;
 
-    private int n; //time period of auto update
+    public int n; //time period of auto update
     private int cnt; //count how many updates
 
     public DVupdater(Router r, int period){

@@ -63,7 +63,6 @@ public class Router {
     }
 
 
-
     public void forwardMessage(String msg, String destIp, int destPort){
 
         try {
@@ -203,7 +202,8 @@ public class Router {
     }
 
 
-    public void dropNeighbor(Neighbor n){
+    public void dropNeighbor(int dPort){
+        Neighbor n = getNeighbor(dPort);
         neighborList.remove(n);
         forwardingTable.remove(n);
         for(int destPort: forwardingTable.keySet()){
