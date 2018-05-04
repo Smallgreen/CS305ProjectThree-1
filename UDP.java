@@ -72,9 +72,24 @@ public class UDP {
         }
 
         sendHelper(msg, destIp, destPort);
+
     }
 
-    public void sendWeight(){
+    public void sendWeight(int weight, String destIp, int destPort, String srcIp, int srcPort){
+
+        String msg = "";
+        msg += weight + " " + srcIp + " " + srcPort;
+
+        byte[] sentMsg = new byte[1 + msg.length()];
+        byte type = 2;
+        sentMsg[0] = type;
+
+        byte[] content = msg.getBytes();
+        for(int i = 1; i < msg.length() + 1; i++){
+            sentMsg[i] = content[i-1];
+        }
+
+        sendHelper(sentMsg, destIp, destPort);
 
     }
 

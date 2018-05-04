@@ -53,6 +53,23 @@ public class cmdReader implements Runnable{
                     }
 
                     case("CHANGE"): {
+                        //CHANGE <dst-ip> <dst-port> <new-weight>
+                        String destIP = lineSc.next();
+                        String dPort = lineSc.next();
+                        int destPort = Integer.parseInt(dPort);
+                        int weight = Integer.parseInt(lineSc.next());
+
+                        //send new weight to dest router
+                        r.updateWeight(weight, destIP, destPort);
+
+                        //update cur router
+                        if(r.updateLocalWeight(weight, r.getIp(), r.getPort())){
+                            if(r.dvAlgorithm()){
+                                r.autoBroadcast();
+                            }
+                        }
+
+
                         break;
 
                     }

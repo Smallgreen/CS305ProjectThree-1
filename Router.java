@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Router {
 
@@ -31,7 +31,7 @@ public class Router {
         this.port = port;
 
         neighborList = new ArrayList<>();
-        forwardingTable = new HashMap<>();
+        forwardingTable = new ConcurrentHashMap<>();
         dv = new DistanceVector();
 
         //init socket
@@ -83,6 +83,23 @@ public class Router {
         //forwardMessage(msg, destIp, destPort);
     }
 
+    public void updateWeight(int newWeight, String destIp, int destPort){
+        sender.sendWeight(newWeight, destIp, destPort, ip, port);
+    }
+
+    public synchronized boolean updateLocalWeight(int newWeight, String destIp, int destPort){
+        Neighbor n = getNeighbor(destPort);
+        int oldWeight = n.getWeight();
+
+        if(oldWeight == newWeight){
+            return false;
+        }
+        else {
+            n.setWeight(newWeight);
+            return true;
+        }
+    }
+
     public void autoBroadcast(){
         if(reverse){
 
@@ -90,9 +107,6 @@ public class Router {
         else{
             for(Neighbor n: neighborList){
                 sender.sendDV(dv, n.getIp(), n.getPort(), ip, port);
-            }
-            if (!neighborList.isEmpty()) {
-                String printout = "Updated all neighbors";
             }
         }
 
@@ -139,15 +153,15 @@ public class Router {
 
             }
         }
-
-        System.out.println("temp " + temp.getMap());
-        System.out.println("dv "+dv.getMap());
+//
+//        System.out.println("temp " + temp.getMap());
+//        System.out.println("dv "+dv.getMap());
 
         if(!temp.equals(dv)){
             isUpdated = true;
         }
 
-        System.out.println("equal "+temp.getMap().equals(dv.getMap()));
+        //System.out.println("equal "+temp.getMap().equals(dv.getMap()));
 
         if(isUpdated){
 //            new dv calculated:
@@ -203,7 +217,7 @@ public class Router {
 
     public void addNeighbor(Neighbor n){
         neighborList.add(n);
-
+        System.out.println("add neighbor");
         //recalculate forwarding table and run dv alg
         if(dvAlgorithm()){
             autoBroadcast();
@@ -211,17 +225,21 @@ public class Router {
     }
 
 
-    public void dropNeighbor(int dPort){
+    public synchronized void dropNeighbor(int dPort){
         Neighbor n = getNeighbor(dPort);
-        neighborList.remove(n);
-        forwardingTable.remove(n);
-        for(int destPort: forwardingTable.keySet()){
-            if(forwardingTable.get(destPort).getPort() == n.getPort()){
-                forwardingTable.remove(destPort);
+        if(neighborList.contains(n)){
+
+            neighborList.remove(n);
+            forwardingTable.remove(n);
+            for(int destPort: forwardingTable.keySet()){
+                if(forwardingTable.get(destPort).getPort() == n.getPort()){
+                    forwardingTable.remove(destPort);
+                }
             }
+            System.out.println("neighbor " + n.getIp() + " : " + n.getPort() + " dropped");
+
         }
 
-        System.out.println("neighbor " + n.getIp() + " : " + n.getPort() + " dropped");
     }
 
     public String getIp() {

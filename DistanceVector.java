@@ -1,16 +1,16 @@
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DistanceVector {
     private Map<Neighbor, Integer> dvector;
     private Router srcRouter;
 
     public DistanceVector(){
-        dvector = new HashMap<>();
+        dvector = new ConcurrentHashMap<>();
     }
 
     public DistanceVector(String vector, Router r){
-        dvector = new HashMap<>();
+        dvector = new ConcurrentHashMap<>();
         srcRouter = r;
         //format ip port weight&ip port weight
         String[] vectors = vector.split("&");
@@ -54,7 +54,6 @@ public class DistanceVector {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof DistanceVector) {
-            System.out.println("compare");
             DistanceVector dv = (DistanceVector) obj;
             return this.dvector.equals(dv.dvector);
         }

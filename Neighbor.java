@@ -20,21 +20,21 @@ public class Neighbor {
         this.weight = weight;
         this.r = r;
         dv = new DistanceVector();
-        timer = new Timer();
-        startTimer();
+        //timer = new Timer();
+        //startTimer();
     }
 
     final void startTimer() {
         timer.cancel();
         timer = new Timer();
-        //this task drop the neighbor from the current router that it's contained in
+        //this task drop the neighbor if didnt receive dv after 3
         TimerTask dropNeighborTask = new TimerTask() {
             @Override
             public void run() {
                 r.dropNeighbor(port);
             }
         };
-        timer.schedule(dropNeighborTask, n * t * 1000);
+        timer.schedule(dropNeighborTask, n*t*1000);
     }
 
     void stopTimer() {
@@ -78,5 +78,9 @@ public class Neighbor {
     public int hashCode() {
         int hash =  ip.hashCode() + port;
         return hash;
+    }
+
+    public void setWeight(int newWeight){
+        weight = newWeight;
     }
 }
