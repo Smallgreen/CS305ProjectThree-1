@@ -161,7 +161,7 @@ public class Router {
 
         System.out.println("udv "+udv.getDV());
         System.out.println("un "+un.getDv().getDV());
-        if(un.getDv().getMap().equals(udv.getMap())){
+        if(un.getDv().equals(udv)){
             return false;
         }
         un.setDV(udv);
