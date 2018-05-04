@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class DistanceVector {
     private Map<Neighbor, Integer> dvector;
@@ -10,6 +11,7 @@ public class DistanceVector {
     }
 
     public DistanceVector(String vector, Router r){
+        dvector = new HashMap<>();
         srcRouter = r;
         //format ip port weight&ip port weight
         String[] vectors = vector.split("&");
@@ -17,9 +19,9 @@ public class DistanceVector {
         for(String v :vectors){
             String[] info = v.split(" ");
             String ip = info[0];
-            int port = Integer.parseInt(info[1]);
-            int weight = Integer.parseInt(info[2]);
-            Neighbor n = new Neighbor(ip, port, weight, r);
+            int port = Integer.parseInt(info[2]);
+            int weight = Integer.parseInt(info[3]);
+            Neighbor n = new Neighbor(ip, port, weight, srcRouter);
             dvector.put(n, weight);
         }
 
@@ -33,7 +35,7 @@ public class DistanceVector {
         String dv = "";
 
         for(Neighbor n: dvector.keySet()){
-            dv += n.getIp() + " : " + n.getPort() + n.getWeight() + "\n";
+            dv += n.getIp() + " : " + n.getPort() + " " + n.getWeight() + "\n";
         }
 
         return dv;
@@ -43,19 +45,39 @@ public class DistanceVector {
         dvector.put(n,weight);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 47 * hash + Objects.hashCode(this.dvector);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DistanceVector) {
+            DistanceVector nDV = (DistanceVector) obj;
+            return this.dvector.equals(nDV.dvector);
+        }
+        return false;
+    }
+
     public Integer getDist(Neighbor n){
         return dvector.get(n);
     }
 
     public Map<Neighbor, Integer> getMap(){
+
         return dvector;
     }
 
     @Override
     public String toString() {
         String str = "";
-        str += srcRouter.getIp() + srcRouter.getPort() + getDV();
-
+        //str += srcRouter.getIp()+ " " + srcRouter.getPort() + " " + getDV();
+        for(Neighbor n: dvector.keySet()){
+            str += n.getIp() + " : " + n.getPort() + " " + n.getWeight() + "&";
+        }
+        //String str = getDV();
         return str;
     }
 }

@@ -48,9 +48,12 @@ public class cmdReader implements Runnable{
 
                     case("PRINT"): {
                         r.printDV();
+                        break;
+
                     }
 
                     case("CHANGE"): {
+                        break;
 
                     }
                 }
