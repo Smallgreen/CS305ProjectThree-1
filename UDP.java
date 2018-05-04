@@ -23,7 +23,7 @@ public class UDP {
         //calculate new msg size = type + msg length + next hop's ip + port
         int length;
         byte type = 0;
-        byte splitter = 120;
+        //byte splitter = 120;
         String address = " " + destIp + " - " + Integer.toString(destPort);
 
         length = 1 + msg.length() + 1 + address.length();
@@ -38,11 +38,11 @@ public class UDP {
             sentMsg[i] = msgContent[i-1];
         }
 
-        sentMsg[msg.length()] = splitter;
+        //sentMsg[msg.length()] = splitter;
 
         byte[] add = address.getBytes();
         int temp = 0;
-        for(int i = msg.length() + 2; i <  length; i++){
+        for(int i = msg.length() + 1; i <  length; i++){
             sentMsg[i] = add[temp];
             temp++;
         }
@@ -54,8 +54,21 @@ public class UDP {
 
     }
 
-    public void sendDV(){
+    public void sendDV(DistanceVector dv, String destIp, int destPort){
+        //String msg = dv
+        String vector = dv.toString();
+        byte[] msg = new byte[vector.length() + 1];
 
+        byte type = 1;
+
+        msg[0] = type;
+
+        byte[] vectorBytes = vector.getBytes();
+        for(int i = 0; i < vectorBytes.length; i++){
+            msg[i+1] = vectorBytes[i];
+        }
+
+        sendHelper(msg, destIp, destPort);
     }
 
     public void sendWeight(){

@@ -4,6 +4,8 @@ public class Neighbor {
     private int port;
     private int weight;
 
+    private DistanceVector dv;
+
     Router r;
 
     Neighbor(String ip, int port, int weight, Router r){
@@ -19,5 +21,17 @@ public class Neighbor {
 
     public String getIp() {
         return ip;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setDV(DistanceVector dv){
+        this.dv = dv;
+    }
+
+    public DistanceVector getDv() {
+        return dv;
     }
 }
