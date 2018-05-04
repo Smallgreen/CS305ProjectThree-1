@@ -104,6 +104,20 @@ public class Router {
 
     public void autoBroadcast(){
         if(reverse){
+            for(Neighbor n : neighborList){
+                DistanceVector temp = new DistanceVector();
+                //copy the entries
+                for(Map.Entry<Neighbor, Integer> d: dv.getMap().entrySet()){
+                    temp.getMap().put(d.getKey().copy(), d.getValue());
+                }
+                for(Integer port: forwardingTable.keySet()){
+                    int nextHopPort = forwardingTable.get(port).getPort();
+                    if(nextHopPort == n.getPort() && port!= nextHopPort){
+                        temp.removeVector(forwardingTable.get(port));
+                    }
+                }
+                sender.sendDV(temp, n.getIp(), n.getPort(), ip, port);
+            }
 
         }
         else{
