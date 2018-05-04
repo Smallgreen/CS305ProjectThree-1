@@ -108,7 +108,12 @@ public class Router {
         }
         else{
             for(Neighbor n: neighborList){
-                sender.sendDV(dv, n.getIp(), n.getPort(), ip, port);
+                DistanceVector temp = new DistanceVector();
+                //copy the entries
+                for(Map.Entry<Neighbor, Integer> d: dv.getMap().entrySet()){
+                    temp.getMap().put(d.getKey().copy(), d.getValue());
+                }
+                sender.sendDV(temp, n.getIp(), n.getPort(), ip, port);
             }
         }
 
@@ -244,6 +249,7 @@ public class Router {
         }
 
     }
+
 
     public String getIp() {
         return ip;

@@ -67,7 +67,7 @@ public class DistanceVector {
         String str = "";
         //str += srcRouter.getIp()+ " " + srcRouter.getPort() + " " + getDV();
         for(Neighbor n: dvector.keySet()){
-            str += n.getIp() + " : " + n.getPort() + " " + n.getWeight() + "&";
+            str += n.getIp() + " : " + n.getPort() + " " +  dvector.get(n)  + "&";
         }
         //String str = getDV();
         return str;
