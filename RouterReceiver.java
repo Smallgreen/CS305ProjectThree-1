@@ -98,7 +98,7 @@ public class RouterReceiver implements Runnable{
                 String srcIp = msg[1];
                 int srcPort = Integer.parseInt(msg[2]);
 
-                System.out.println("get"+router.getNeighbor(srcPort).getPort());
+                //System.out.println("get"+router.getNeighbor(srcPort).getPort());
                 //if null, new neighbor
                 if(router.getNeighbor(srcPort) == null){
                     router.addNeighbor(new Neighbor(srcIp, srcPort, weight, router));
