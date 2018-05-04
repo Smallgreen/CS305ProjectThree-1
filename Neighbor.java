@@ -60,4 +60,23 @@ public class Neighbor {
     public DistanceVector getDv() {
         return dv;
     }
+
+    public Neighbor copy(){
+        return new Neighbor(ip, port, weight, r);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Neighbor){
+            Neighbor n = (Neighbor) obj;
+            return this.ip.equals(n.ip) && this.port == n.port && this.weight == n.weight;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash =  ip.hashCode() + port;
+        return hash;
+    }
 }

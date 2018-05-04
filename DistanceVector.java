@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class DistanceVector {
     private Map<Neighbor, Integer> dvector;
@@ -45,18 +44,19 @@ public class DistanceVector {
         dvector.put(n,weight);
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 47 * hash + Objects.hashCode(this.dvector);
-        return hash;
-    }
+//    @Override
+//    public int hashCode() {
+//        int hash = 3;
+//        hash = 47 * hash + Objects.hashCode(this.dvector);
+//        return hash;
+//    }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof DistanceVector) {
-            DistanceVector nDV = (DistanceVector) obj;
-            return this.dvector.equals(nDV.dvector);
+            System.out.println("compare");
+            DistanceVector dv = (DistanceVector) obj;
+            return this.dvector.equals(dv.dvector);
         }
         return false;
     }

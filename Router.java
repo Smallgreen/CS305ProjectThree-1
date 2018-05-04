@@ -103,7 +103,11 @@ public class Router {
         boolean isUpdated = false;
 
         DistanceVector temp = new DistanceVector();
-        temp.getMap().putAll(dv.getMap());
+        //copy the entries
+        for(Map.Entry<Neighbor, Integer> d: dv.getMap().entrySet()){
+            temp.getMap().put(d.getKey().copy(), d.getValue());
+        }
+
         dv.getMap().clear();
 
         initDV(dv);
@@ -136,9 +140,14 @@ public class Router {
             }
         }
 
-        if(!temp.getMap().equals(dv.getMap())){
+        System.out.println("temp " + temp.getMap());
+        System.out.println("dv "+dv.getMap());
+
+        if(!temp.equals(dv)){
             isUpdated = true;
         }
+
+        System.out.println("equal "+temp.getMap().equals(dv.getMap()));
 
         if(isUpdated){
 //            new dv calculated:
@@ -158,8 +167,8 @@ public class Router {
     public boolean updateDV(DistanceVector udv, int uport){
         Neighbor un = getNeighbor(uport);
 
-        System.out.println("udv "+udv.getDV());
-        System.out.println("un "+un.getDv().getDV());
+        //System.out.println("udv "+udv.getDV());
+        //System.out.println("un "+un.getDv().getDV());
         if(un.getDv().equals(udv)){
             return false;
         }
