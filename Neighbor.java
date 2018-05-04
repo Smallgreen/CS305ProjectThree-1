@@ -13,6 +13,7 @@ public class Neighbor {
         this.port = port;
         this.weight = weight;
         this.r = r;
+        dv = new DistanceVector();
     }
 
     public int getPort() {

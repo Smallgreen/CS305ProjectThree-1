@@ -57,7 +57,19 @@ public class RouterReceiver implements Runnable{
             //dv
             case(1):{
 
+                System.out.println(data);
+                String[] msgDV = data.split(" ");
                 //set this neighbor's dv
+                if(router.getNeighbor(Integer.parseInt(msgDV[1])) == null){
+                    router.addNeighbor(new Neighbor(msgDV[0], Integer.parseInt(msgDV[1]), Integer.MAX_VALUE, router));
+                }
+
+//                DistanceVector
+//                if(router.updateDV(Integer.parseInt(msgDV[1]))){
+//                    if(router.dvAlgorithm()){
+//                        router.autoBroadcast();
+//                    }
+//                }
 
                 }
                 break;

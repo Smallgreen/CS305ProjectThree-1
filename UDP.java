@@ -54,7 +54,7 @@ public class UDP {
 
     }
 
-    public void sendDV(DistanceVector dv, String destIp, int destPort){
+    public void sendDV(DistanceVector dv, String destIp, int destPort, String srcIp, int srcPort){
         //String msg = dv
         String vector = dv.toString();
         byte[] msg = new byte[vector.length() + 1];

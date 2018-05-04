@@ -48,14 +48,15 @@ public class DistanceVector {
     }
 
     public Map<Neighbor, Integer> getMap(){
+
         return dvector;
     }
 
     @Override
     public String toString() {
-        String str = "";
-        str += srcRouter.getIp() + srcRouter.getPort() + getDV();
-
+        //String str = "";
+        //str += srcRouter.getIp()+ " " + srcRouter.getPort() + " " + getDV();
+        String str = getDV();
         return str;
     }
 }

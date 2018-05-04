@@ -22,7 +22,7 @@ public class Router {
     private DVupdater dvp;
 
     //port - weight
-    private static ArrayList<Neighbor> neighborList;
+    private ArrayList<Neighbor> neighborList;
     private Map<Integer, Neighbor> forwardingTable;
 
     public Router(String ip, int port, boolean isReverse){
@@ -30,8 +30,9 @@ public class Router {
         this.ip = ip;
         this.port = port;
 
+        neighborList = new ArrayList<>();
         forwardingTable = new HashMap<>();
-        //dv = new DistanceVector();
+        dv = new DistanceVector();
 
         //init socket
         try {
@@ -90,7 +91,7 @@ public class Router {
         }
         else{
             for(Neighbor n: neighborList){
-                sender.sendDV(dv, n.getIp(), n.getPort());
+                sender.sendDV(dv, n.getIp(), n.getPort(), ip, port);
             }
         }
 
@@ -101,6 +102,7 @@ public class Router {
         boolean isUpdated = false;
 
         DistanceVector temp = new DistanceVector();
+        temp.getMap().putAll(dv.getMap());
         dv.getMap().clear();
 
         initDV(dv);
@@ -109,6 +111,9 @@ public class Router {
         for(Neighbor neighbor: neighborList){
             DistanceVector nDV = neighbor.getDv();
 
+//            if(nDV.getMap() == null){
+//                System.out.println("aaa");
+//            }
             for(Neighbor dest : nDV.getMap().keySet()){
                 //if it is not go back to itself, find the min distance
                 //compare cur distance to dest and dist to neighbor + neighbor to dest
@@ -130,9 +135,43 @@ public class Router {
             }
         }
 
+        if(!temp.getMap().equals(dv.getMap())){
+            isUpdated = true;
+        }
+
+        if(isUpdated){
+//            new dv calculated:
+//            ipAddress:port distance nextHopIpAddress:nextHopPort
+            System.out.println("new dv calculated:");
+            for(Neighbor n : dv.getMap().keySet()){
+                System.out.println(n.getIp() + " : " + n.getPort() + " " + dv.getDist(n)
+                + " nextHopIpAddress: " + forwardingTable.get(n.getPort()).getIp()
+                        + " : " +forwardingTable.get(n.getPort()).getPort());
+            }
+
+        }
         return isUpdated;
 
     }
+
+    public boolean updateDV(DistanceVector udv, int uport){
+        Neighbor un = getNeighbor(uport);
+        if(un.getDv().getMap().equals(udv.getMap())){
+            return false;
+        }
+        un.setDV(udv);
+        return true;
+    }
+
+    public Neighbor getNeighbor(int nport){
+        for(Neighbor n : neighborList){
+            if(n.getPort() == nport){
+                return n;
+            }
+        }
+        return null;
+    }
+
 
     private void initDV(DistanceVector dv){
         //add all neighbors into dv
@@ -189,7 +228,6 @@ public class Router {
         boolean isReverse = false;
         String filePath;
         Router r;
-        neighborList = new ArrayList<>();
 
         //get input
         if(args.length < 1){
