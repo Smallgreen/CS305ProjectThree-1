@@ -37,6 +37,7 @@ public class RouterReceiver implements Runnable{
         //format: type destIp destPort srcIp srcPort msg
 
         switch(type){
+            //normal message
             case(0):
                 String[] msg = data.split(" ");
                 //if port = dest port
@@ -51,20 +52,18 @@ public class RouterReceiver implements Runnable{
                 else{
                     router.sendMessage(data, msg[0], Integer.parseInt(msg[1]));
                 }
-            return;
+                break;
+
+            //dv
+            case(1):{
+
+                //set this neighbor's dv
+
+                }
+                break;
         }
 
     }
 
 
-    private byte[] toPrimitives(Byte[] Bytes)
-    {
-        byte[] bytes = new byte[Bytes.length];
-
-        for(int i = 0; i < Bytes.length; i++) {
-            bytes[i] = Bytes[i];
-        }
-
-        return bytes;
-    }
 }
