@@ -26,7 +26,7 @@ public class UDP {
         //byte splitter = 120;
         String address = " " + destIp + " - " + Integer.toString(destPort);
 
-        length = 1 + msg.length() + 1 + address.length();
+        length = 1 + msg.length() + address.length();
 
         byte[] sentMsg = new byte[length];
 
@@ -56,7 +56,10 @@ public class UDP {
 
     public void sendDV(DistanceVector dv, String destIp, int destPort, String srcIp, int srcPort){
         //String msg = dv
-        String vector = dv.toString();
+        //insert src port and ip in front
+        String vector = "";
+        vector += srcIp + " " + srcPort + "#";
+        vector += dv.toString();
         byte[] msg = new byte[vector.length() + 1];
 
         byte type = 1;

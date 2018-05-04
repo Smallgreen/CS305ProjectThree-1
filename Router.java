@@ -75,7 +75,6 @@ public class Router {
 
     public void sendMessage(String msg, String destIp, int destPort){
         Neighbor nextHop = forwardingTable.get(destPort);
-
         if(nextHop == null){
             return;
         }
@@ -92,6 +91,9 @@ public class Router {
         else{
             for(Neighbor n: neighborList){
                 sender.sendDV(dv, n.getIp(), n.getPort(), ip, port);
+            }
+            if (!neighborList.isEmpty()) {
+                String printout = "Updated all neighbors";
             }
         }
 
@@ -156,6 +158,9 @@ public class Router {
 
     public boolean updateDV(DistanceVector udv, int uport){
         Neighbor un = getNeighbor(uport);
+
+        System.out.println("udv "+udv.getDV());
+        System.out.println("un "+un.getDv().getDV());
         if(un.getDv().getMap().equals(udv.getMap())){
             return false;
         }
