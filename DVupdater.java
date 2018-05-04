@@ -20,12 +20,15 @@ public class DVupdater implements Runnable{
     public void run() {
 
         timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 router.autoBroadcast();
             }
-        }, 0, n*1000);
+        },n*1000);
+    }
 
+    public void stopTimer(){
+        timer.cancel();
     }
 }
