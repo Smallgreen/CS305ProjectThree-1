@@ -56,7 +56,7 @@ public class Router {
         Thread creaderThread = new Thread(creader);
         creaderThread.start();
 
-        dvp = new DVupdater(this, 20);
+        dvp = new DVupdater(this, 2);
         Thread dvpThread = new Thread(dvp);
         dvpThread.start();
 
