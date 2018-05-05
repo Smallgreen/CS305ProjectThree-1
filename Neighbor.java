@@ -20,12 +20,26 @@ public class Neighbor {
         this.weight = weight;
         this.r = r;
         dv = new DistanceVector();
-        //timer = new Timer();
-        //startTimer();
     }
 
-    final void startTimer() {
+    final void reStartTimer() {
+
+        System.out.println(port+" restart");
         timer.cancel();
+        timer = new Timer();
+        //this task drop the neighbor if didnt receive dv after 3
+        TimerTask dropNeighborTask = new TimerTask() {
+            @Override
+            public void run() {
+                r.dropNeighbor(port);
+            }
+        };
+        timer.schedule(dropNeighborTask, n*t*1000);
+    }
+
+    public void startTimer() {
+
+        System.out.println(port+" start");
         timer = new Timer();
         //this task drop the neighbor if didnt receive dv after 3
         TimerTask dropNeighborTask = new TimerTask() {
