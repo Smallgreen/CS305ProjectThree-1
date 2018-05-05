@@ -80,7 +80,6 @@ public class Router {
 
         forwardMessage(msg, nextHop.getIp(), nextHop.getPort());
 
-        //forwardMessage(msg, destIp, destPort);
     }
 
     public void updateWeight(int newWeight, String destIp, int destPort){
